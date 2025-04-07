@@ -10,13 +10,17 @@ namespace ExcelF
         public Form1()
         {
             InitializeComponent();
-            //fd = new FileData();
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
             StatusLabel.ForeColor = Color.YellowGreen;
             StatusLabel.Text = "Converting";
+            if (FileData.IsXML == true) 
+            {
+                LogicHandler.ReadXml();
+                FileData.Converter.ConvertToNewCSVFormat();
+            }
             LogicHandler.readExcel();
             StatusLabel.ForeColor = Color.Green;
             StatusLabel.Text = "Ready for saving";
@@ -46,7 +50,7 @@ namespace ExcelF
             OpenFileDialog openFileDialog1 = new OpenFileDialog();
             openFileDialog1.Title = "Select File";
             //openFileDialog1.InitialDirectory = @"C:\";//--"C:\\";
-            openFileDialog1.Filter = "All files (*.*)|*.*|Text File (*.txt,*.csv,*tsv)|*.txt;*.csv;*tsv| Excel File (*.xlsx,*.xls)|*.xlsx;*.xls";
+            openFileDialog1.Filter = "All files (*.*)|*.*|Text File (*.txt,*.csv,*tsv)|*.txt;*.csv;*tsv|Excel File (*.xlsx,*.xls)|*.xlsx;*.xls|XML(*.xml)|*.xml";
             openFileDialog1.FilterIndex = 3;
             openFileDialog1.ShowDialog();
             if (openFileDialog1.FileName != "")
@@ -97,7 +101,7 @@ namespace ExcelF
         {
             StatusLabel.ForeColor = Color.YellowGreen;
             StatusLabel.Text = "Saving file";
-            LogicHandler.SaveFile();
+            LogicHandler.SaveFile(LogicHandler.DataPreparation(FileData.IsXML));
             StatusLabel.ForeColor = Color.Green;
             StatusLabel.Text = $"File is saved to {FileData.NewFilePath}";
         }

@@ -1,6 +1,9 @@
 ﻿using Microsoft.Office.Interop.Excel;
 using System.Text;
 using Range = Microsoft.Office.Interop.Excel.Range;
+using System.Xml.Linq;
+using System.Xml;
+using System.Linq;
 
 namespace ExcelF
 {
@@ -10,7 +13,7 @@ namespace ExcelF
         public static Form1 f;
 
         //считывание данных из excel и запись их в переменную
-        public static void readExcel()
+        public static async void readExcel()
         {
             if (FileData.OldFilePath != null && FileData.OldFilePath.Length != 0)
             {
@@ -67,14 +70,69 @@ namespace ExcelF
             }
         }
 
-        public static async void SaveFile()
+        public static async void ReadXml() 
         {
-            string str = DataPreparation();
+            
+            
+            StXML stXML = new StXML();
+
+            XDocument doc = XDocument.Load(FileData.OldFilePath);
+            XElement? rootElement = doc.Root;
+            if (rootElement != null) 
+            {
+                // сбор неизменных данных описывающих файл
+                XElement? name = rootElement.Element("importer");
+                XElement? ordNum = rootElement.Element("order_number");
+                XElement? ordDate = rootElement.Element("order_date");
+                if (name != null) {
+                    stXML.SetImporter(name.Value);
+                }
+                if (ordNum != null)
+                {
+                    stXML.SetrderOrderNumber(ordNum.Value);
+                }
+                if (ordDate != null)
+                {
+                    stXML.SetOrder_date(ordDate.Value);
+                }
+                XElement? itemsCollection = rootElement.Element("items");
+                foreach (XElement element in itemsCollection.Elements("item")) 
+                {
+                    string RUSname = element.Element("RUSname").Value;
+                    string barcode = element.Element("barcode").Value;
+                    string gtin = element.Element("gtin").Value;
+                    string brand = element.Element("brand").Value;
+                    string number = element.Element("number").Value;
+                    string producer_number = element.Element("producer_number").Value;
+                    string size = element.Element("size").Value;
+                    string color = element.Element("color").Value;
+                    string cert_sign = element.Element("cert_sign").Value;
+
+                    var stItem = new StItem(RUSname, barcode, gtin, brand, number, producer_number, size, color, cert_sign);
+
+                    foreach (XElement matrix in element.Elements("DataMatrixes").Elements("DataMatrix")) 
+                    {
+                        string s1 = matrix.Element("DataMatrixCode").Value;
+                        string s2 = matrix.Element("DataMatrixGS1").Value;
+                        stItem.AddMatrix(new DataMatrix(s1, s2));
+                    }
+                    
+                    stXML.AddItem(stItem);
+
+                }
+            }
+            
+            FileData.SetStXML(stXML);
+            FileData.ConverterInit(stXML);
+        }
+
+
+        public static void SaveFile(string strForSaving)
+        {
+
             using (StreamWriter writer = new StreamWriter($"{FileData.NewFilePath}\\{FileData.FileName}.csv", false))
             {
-                str = DataPreparation();
-
-                writer.Write(str);
+                 writer.Write(strForSaving);
             }
             //FileStream FS = File.Create($"{FileData.NewFilePath}\\{FileData.FileName}.csv");
             //string str = DataPreparation();
@@ -86,36 +144,37 @@ namespace ExcelF
 
 
         //формирование строки для записи в файл
-        private static string DataPreparation() 
+        internal static string DataPreparation(bool IsXML = false) 
         {
             StringBuilder result = new StringBuilder();
 
-            //for (int property = 0; property < FileData.FileRow24.Length; property++)
-            //    {
-            //    result.Append($"{FileData.FileRow24[property]}\t");
-            //    if (property == 24)
-            //    {
-            //        result.Append("\n");
-            //    }
-
-            //}
-
-            for (int rows = 0; rows < FileData.FileRows.Count; rows++)
+            if (IsXML)
             {
-                for (int property = 0; property < FileData.FileRows[rows].Length; property++)
+                result.Append("Datamatrix\tDataMatrixCode\tBarcode\tProducedDate\tGTIN\tArticle\tProdгcer\tImporter\tBrand\tCertSign\tDescriptiveCharacteristic1\tDescriptiveCharacteristic2\tDescriptiveCharacteristic3\tDescriptiveCharacteristic4\tDescriptiveCharacteristic5\n");
+                for (int i = 0; i < FileData.Converter.NewStyleFileFields.Count; i++) 
                 {
-                    result.Append($"{FileData.FileRows[rows][property]}\t");
-                    if (property == 23)
-                    {
-                        result.Append("\n");
-                    }
-                }
-                if (rows == FileData.FileRows.Count - 1) 
-                {
-                    MessageBox.Show("ОПА");
+                    var s = FileData.Converter.NewStyleFileFields[i];
+                    result.Append($"{s.DataMatrix}\t{s.DataMatrixCode}\t{s.Barcode}\t{s.ProducedDate}\t{s.Gtin}\t{s.Article}\t{s.Producer}\t{s.Importer}\t{s.Brand}\t{s.Cert_sign}\t{s.DescriptiveCharacteristic1}\t{s.DescriptiveCharacteristic2}\t{s.DescriptiveCharacteristic3}\t{s.DescriptiveCharacteristic4}\t{s.DescriptiveCharacteristic5}\n");
                 }
             }
-
+            else
+            {
+                for (int rows = 0; rows < FileData.FileRows.Count; rows++)
+                {
+                    for (int property = 0; property < FileData.FileRows[rows].Length; property++)
+                    {
+                        result.Append($"{FileData.FileRows[rows][property]}\t");
+                        if (property == 23)
+                        {
+                            result.Append("\n");
+                        }
+                    }
+                    if (rows == FileData.FileRows.Count - 1)
+                    {
+                        MessageBox.Show("ОПА");
+                    }
+                }
+            }
             return result.ToString();
 
         } 

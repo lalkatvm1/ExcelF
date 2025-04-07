@@ -11,17 +11,21 @@ namespace ExcelF
 {
     internal static class FileData
     {
-        
+        public static bool IsXML { get => isXML; }
         public static string OldFilePath { get => oldFilePath; }
         public static string NewFilePath { get => newFilePath; }
         public static List<string[]> FileRows { get => fileRows; }
         public static string FileName { get => fileName; }
         public static string[] FileRow24 { get; }
 
+        
+
+
+
         private static string oldFilePath;
         private static string newFilePath;
         private static string fileName;
-
+        private static bool isXML = false;
 
         private static string[] fileRow24;
         static List<string[]> fileRows;
@@ -29,7 +33,25 @@ namespace ExcelF
         static NewStandartFields[] newStyleFileFields;
 
         public static bool IsConverted { get; }
+        
+
         private static bool isConverted = false;
+
+        internal static StXML StXML { get => stXML; }
+        private static StXML stXML;
+
+        internal static Converter Converter { get => converter; }
+        private static Converter converter;
+
+        public static void ConverterInit(StXML stXML)
+        {
+            converter = new Converter (stXML);
+        }
+
+        public static void SetStXML(StXML XML) 
+        {
+            stXML = XML;
+        }
 
         public static void SetFileName(string FileName)
         {
@@ -37,12 +59,10 @@ namespace ExcelF
             MatchCollection matches = rg.Matches(FileName);
             string fileType = matches[0].Value;
             fileName = FileName.Replace(fileType, "");
-            //int ftLength = fileType.Length;
-            //int[] indexes = new int[ftLength];
-            //for (int i = 0; i < ftLength; i++)
-            //{
-            //    indexes[i] = FileName.IndexOf(fileType[i]);
-            //}
+            if (fileType == ".xml") 
+            {
+                isXML = true;
+            }
 
         }
 
@@ -61,7 +81,6 @@ namespace ExcelF
                 newStyleFileFields = fields;
             }
         }
-
 
 
         public static void SetFields(string[] fields)
