@@ -1,5 +1,4 @@
-using Microsoft.Office.Interop.Excel;
-using Range = Microsoft.Office.Interop.Excel.Range;
+//using Range = Microsoft.Office.Interop.Excel.Range;
 using System.Text.RegularExpressions;
 
 namespace ExcelF
@@ -21,7 +20,7 @@ namespace ExcelF
                 LogicHandler.ReadXml();
                 FileData.Converter.ConvertToNewCSVFormat();
             }
-            LogicHandler.readExcel();
+            //LogicHandler.readExcel();
             StatusLabel.ForeColor = Color.Green;
             StatusLabel.Text = "Ready for saving";
 
