@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ExcelF
+﻿namespace ExcelF
 {
     internal class Converter
     {
@@ -31,7 +25,7 @@ namespace ExcelF
                     for(int matrix  = 0; matrix < stXML.Items[item].DataMatrixes.Count; matrix++) 
                     {
                         var NewStF = new NewStandartFields();
-                        NewStF.DataMatrix = stXML.Items[item].DataMatrixes[matrix].DataMatrixGS1.Replace("&#232;", "\u001d");
+                        NewStF.DataMatrix = stXML.Items[item].DataMatrixes[matrix].DataMatrixGS1/*.Replace("&#232;", "\u001d")*/;
                         NewStF.DataMatrixCode = stXML.Items[item].DataMatrixes[matrix].DataMatrixCode;
                         NewStF.Barcode = stXML.Items[item].Barcode;
                         NewStF.ProducedDate = "";
