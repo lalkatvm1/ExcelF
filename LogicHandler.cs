@@ -1,9 +1,6 @@
-﻿using Microsoft.Office.Interop.Excel;
-using System.Text;
-using Range = Microsoft.Office.Interop.Excel.Range;
+﻿using System.Text;
+//using Range = Microsoft.Office.Interop.Excel.Range;
 using System.Xml.Linq;
-using System.Xml;
-using System.Linq;
 
 namespace ExcelF
 {
@@ -13,62 +10,62 @@ namespace ExcelF
         public static Form1 f;
 
         //считывание данных из excel и запись их в переменную
-        public static async void readExcel()
-        {
-            if (FileData.OldFilePath != null && FileData.OldFilePath.Length != 0)
-            {
-                if (FileData.IsConverted != true)
-                {
-                    Microsoft.Office.Interop.Excel.Application excel = new Microsoft.Office.Interop.Excel.Application();
-                    Workbook wb;
-                    Worksheet ws;
+        //public static async void readExcel()
+        //{
+        //    if (FileData.OldFilePath != null && FileData.OldFilePath.Length != 0)
+        //    {
+        //        if (FileData.IsConverted != true)
+        //        {
+        //            Microsoft.Office.Interop.Excel.Application excel = new Microsoft.Office.Interop.Excel.Application();
+        //            Workbook wb;
+        //            Worksheet ws;
 
-                    wb = excel.Workbooks.Open(FileData.OldFilePath);
-                    ws = wb.Worksheets[1];
+        //            wb = excel.Workbooks.Open(FileData.OldFilePath);
+        //            ws = wb.Worksheets[1];
 
-                    Range range;
-                    string[] row = new string[24];
-                    bool running = true;
-                    for (int j = 0; running == true; j++)
-                    {
-                        range = ws.Range[$"A{j + 1}:X{j + 1}"];
-                        int nullCounter = 0;
-                        for (int i = 0; i < range.Cells.Count; i++)
-                        {
-                            if (i == 23)
-                            {
-                                int x = 2 + 2;
-                            }
+        //            Range range;
+        //            string[] row = new string[24];
+        //            bool running = true;
+        //            for (int j = 0; running == true; j++)
+        //            {
+        //                range = ws.Range[$"A{j + 1}:X{j + 1}"];
+        //                int nullCounter = 0;
+        //                for (int i = 0; i < range.Cells.Count; i++)
+        //                {
+        //                    if (i == 23)
+        //                    {
+        //                        int x = 2 + 2;
+        //                    }
 
-                            row[i] = Convert.ToString(range.Cells[i + 1].Value);
-                            if (row[i] == null)
-                            {
-                                nullCounter++;
-                            }
-                            if (nullCounter == 24)
-                            {
-                                running = false;
-                            }
-                        }
-                        if (running == true)
-                        {
-                            FileData.SetFields(row);
-                            FileData.AddRow();
-                            row = new string[24];
-                        }
-                        else
-                        {
-                            MessageBox.Show("ОПА");
-                        }
-                    }
+        //                    row[i] = Convert.ToString(range.Cells[i + 1].Value);
+        //                    if (row[i] == null)
+        //                    {
+        //                        nullCounter++;
+        //                    }
+        //                    if (nullCounter == 24)
+        //                    {
+        //                        running = false;
+        //                    }
+        //                }
+        //                if (running == true)
+        //                {
+        //                    FileData.SetFields(row);
+        //                    FileData.AddRow();
+        //                    row = new string[24];
+        //                }
+        //                else
+        //                {
+        //                    MessageBox.Show("ОПА");
+        //                }
+        //            }
 
-                }
-                else
-                {
-                    MessageBox.Show("Миша, всё хуйня! Давай по новой.");
-                }
-            }
-        }
+        //        }
+        //        else
+        //        {
+        //            MessageBox.Show("Миша, всё хуйня! Давай по новой.");
+        //        }
+        //    }
+        //}
 
         public static async void ReadXml() 
         {
@@ -78,6 +75,7 @@ namespace ExcelF
 
             XDocument doc = XDocument.Load(FileData.OldFilePath);
             XElement? rootElement = doc.Root;
+            int counter = 0;
             if (rootElement != null) 
             {
                 // сбор неизменных данных описывающих файл
@@ -115,10 +113,15 @@ namespace ExcelF
                         string s1 = matrix.Element("DataMatrixCode").Value;
                         string s2 = matrix.Element("DataMatrixGS1").Value;
                         stItem.AddMatrix(new DataMatrix(s1, s2));
+                        counter++;
+                        if (counter == 33)
+                        {
+                            var x = 2 + 2;
+                        }
                     }
                     
                     stXML.AddItem(stItem);
-
+                    
                 }
             }
             
@@ -126,7 +129,7 @@ namespace ExcelF
             FileData.ConverterInit(stXML);
         }
 
-
+        
         public static void SaveFile(string strForSaving)
         {
 
@@ -150,11 +153,11 @@ namespace ExcelF
 
             if (IsXML)
             {
-                result.Append("Datamatrix\tDataMatrixCode\tBarcode\tProducedDate\tGTIN\tArticle\tProdгcer\tImporter\tBrand\tCertSign\tDescriptiveCharacteristic1\tDescriptiveCharacteristic2\tDescriptiveCharacteristic3\tDescriptiveCharacteristic4\tDescriptiveCharacteristic5\n");
+                result.Append("Datamatrix\tDataMatrixCode\tBarcode\tProducedDate\tGTIN\tArticle\tProdгcer\tImporter\tBrand\tCertSign\tDescriptiveCharacteristic1\tDescriptiveCharacteristic2\tDescriptiveCharacteristic3\tDescriptiveCharacteristic4\tDescriptiveCharacteristic5\tDescriptiveCharacteristic6\tDescriptiveCharacteristic7\tDescriptiveCharacteristic8\tDescriptiveCharacteristic9\tDescriptiveCharacteristic10\n");
                 for (int i = 0; i < FileData.Converter.NewStyleFileFields.Count; i++) 
                 {
                     var s = FileData.Converter.NewStyleFileFields[i];
-                    result.Append($"{s.DataMatrix}\t{s.DataMatrixCode}\t{s.Barcode}\t{s.ProducedDate}\t{s.Gtin}\t{s.Article}\t{s.Producer}\t{s.Importer}\t{s.Brand}\t{s.Cert_sign}\t{s.DescriptiveCharacteristic1}\t{s.DescriptiveCharacteristic2}\t{s.DescriptiveCharacteristic3}\t{s.DescriptiveCharacteristic4}\t{s.DescriptiveCharacteristic5}\n");
+                    result.Append($"{s.DataMatrix}\t{s.DataMatrixCode}\t{s.Barcode}\t{s.ProducedDate}\t{s.Gtin}\t{s.Article}\t{s.Producer}\t{s.Importer}\t{s.Brand}\t{s.Cert_sign}\t{s.DescriptiveCharacteristic1}\t{s.DescriptiveCharacteristic2}\t{s.DescriptiveCharacteristic3}\t{s.DescriptiveCharacteristic4}\t{s.DescriptiveCharacteristic5}\t{s.DescriptiveCharacteristic6}\t{s.DescriptiveCharacteristic7}\t{s.DescriptiveCharacteristic8}\t{s.DescriptiveCharacteristic9}\t{s.DescriptiveCharacteristic10}\n");
                 }
             }
             else
