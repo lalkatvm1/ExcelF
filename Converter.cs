@@ -43,7 +43,12 @@
                             NewStF.DescriptiveCharacteristic2 = "Р-р: " + stXML.Items[item].Size;
                             NewStF.DescriptiveCharacteristic3 = "Цвет: " + stXML.Items[item].Color;
                             NewStF.DescriptiveCharacteristic4 = "Артикул пост.: " + stXML.Items[item].Producer_number;
-                            NewStF.DescriptiveCharacteristic5 = "OrderNumber: " + stXML.Order_number + "\tOrderDate: " + stXML.Order_date;
+                            NewStF.DescriptiveCharacteristic5 = "OrderNumber: " + stXML.Order_number;
+                            NewStF.DescriptiveCharacteristic6 = "OrderDate: " + stXML.Order_date;
+                            NewStF.DescriptiveCharacteristic7 = "";
+                            NewStF.DescriptiveCharacteristic8 = "";
+                            NewStF.DescriptiveCharacteristic9 = "";
+                            NewStF.DescriptiveCharacteristic10 = "";
                             NewStyleFileFields.Add(NewStF);
                         }
                     }
@@ -66,7 +71,12 @@
                             NewStF.DescriptiveCharacteristic2 = "Р-р: " + stXML.Items[item].Size;
                             NewStF.DescriptiveCharacteristic3 = "Цвет: " + stXML.Items[item].Color;
                             NewStF.DescriptiveCharacteristic4 = "Артикул пост.: " + stXML.Items[item].Producer_number;
-                            NewStF.DescriptiveCharacteristic5 = "OrderNumber: " + stXML.Order_number + "\tOrderDate: " + stXML.Order_date;
+                            NewStF.DescriptiveCharacteristic5 = "OrderNumber: " + stXML.Order_number;
+                            NewStF.DescriptiveCharacteristic6 = "OrderDate: " + stXML.Order_date;
+                            NewStF.DescriptiveCharacteristic7 = "";
+                            NewStF.DescriptiveCharacteristic8 = "";
+                            NewStF.DescriptiveCharacteristic9 = "";
+                            NewStF.DescriptiveCharacteristic10 = "";
                             NewStyleFileFields.Add(NewStF);
                         }
                     }

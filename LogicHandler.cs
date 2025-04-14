@@ -153,11 +153,11 @@ namespace ExcelF
 
             if (IsXML)
             {
-                result.Append("Datamatrix\tDataMatrixCode\tBarcode\tProducedDate\tGTIN\tArticle\tProdгcer\tImporter\tBrand\tCertSign\tDescriptiveCharacteristic1\tDescriptiveCharacteristic2\tDescriptiveCharacteristic3\tDescriptiveCharacteristic4\tDescriptiveCharacteristic5\n");
+                result.Append("Datamatrix\tDataMatrixCode\tBarcode\tProducedDate\tGTIN\tArticle\tProdгcer\tImporter\tBrand\tCertSign\tDescriptiveCharacteristic1\tDescriptiveCharacteristic2\tDescriptiveCharacteristic3\tDescriptiveCharacteristic4\tDescriptiveCharacteristic5\tDescriptiveCharacteristic6\tDescriptiveCharacteristic7\tDescriptiveCharacteristic8\tDescriptiveCharacteristic9\tDescriptiveCharacteristic10\n");
                 for (int i = 0; i < FileData.Converter.NewStyleFileFields.Count; i++) 
                 {
                     var s = FileData.Converter.NewStyleFileFields[i];
-                    result.Append($"{s.DataMatrix}\t{s.DataMatrixCode}\t{s.Barcode}\t{s.ProducedDate}\t{s.Gtin}\t{s.Article}\t{s.Producer}\t{s.Importer}\t{s.Brand}\t{s.Cert_sign}\t{s.DescriptiveCharacteristic1}\t{s.DescriptiveCharacteristic2}\t{s.DescriptiveCharacteristic3}\t{s.DescriptiveCharacteristic4}\t{s.DescriptiveCharacteristic5}\n");
+                    result.Append($"{s.DataMatrix}\t{s.DataMatrixCode}\t{s.Barcode}\t{s.ProducedDate}\t{s.Gtin}\t{s.Article}\t{s.Producer}\t{s.Importer}\t{s.Brand}\t{s.Cert_sign}\t{s.DescriptiveCharacteristic1}\t{s.DescriptiveCharacteristic2}\t{s.DescriptiveCharacteristic3}\t{s.DescriptiveCharacteristic4}\t{s.DescriptiveCharacteristic5}\t{s.DescriptiveCharacteristic6}\t{s.DescriptiveCharacteristic7}\t{s.DescriptiveCharacteristic8}\t{s.DescriptiveCharacteristic9}\t{s.DescriptiveCharacteristic10}\n");
                 }
             }
             else
